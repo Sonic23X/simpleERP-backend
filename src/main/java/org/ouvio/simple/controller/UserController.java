@@ -1,13 +1,16 @@
 package org.ouvio.simple.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
 import org.ouvio.simple.dto.NewUserDTO;
 import org.ouvio.simple.dto.UserDTO;
 import org.ouvio.simple.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -23,35 +26,37 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDTO> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         log.info("Entrado a metodo: user-findAll");
-        return service.findAll();
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public UserDTO findById(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<UserDTO> findById(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: user-findByid");
-        return service.findById(id);
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO save(@RequestBody NewUserDTO data) {
-        log.info("Entrado a metodo: user-findByid");
-        return service.save(data);
+    public ResponseEntity<UserDTO> save(@Valid @RequestBody NewUserDTO data) {
+        log.info("Entrado a metodo: user-save");
+        return ResponseEntity.created(URI.create("")).body(service.save(data));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable("id") long id, @RequestBody UserDTO data) throws Exception {
+    public ResponseEntity<Void> update(@Valid @PathVariable("id") long id, @RequestBody UserDTO data) throws Exception {
         log.info("Entrado a metodo: user-update");
         service.update(id, data);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: user-delete");
         service.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

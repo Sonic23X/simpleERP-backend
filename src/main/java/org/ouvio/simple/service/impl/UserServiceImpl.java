@@ -5,7 +5,6 @@ import org.ouvio.simple.dto.EmailDTO;
 import org.ouvio.simple.dto.NewUserDTO;
 import org.ouvio.simple.dto.UserDTO;
 import org.ouvio.simple.entity.Company;
-import org.ouvio.simple.entity.Project;
 import org.ouvio.simple.entity.User;
 import org.ouvio.simple.mapper.CompanyMapper;
 import org.ouvio.simple.mapper.UserMapper;
@@ -15,6 +14,7 @@ import org.ouvio.simple.repository.UserRepository;
 import org.ouvio.simple.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -57,6 +57,10 @@ public class UserServiceImpl implements UserService {
         return mapper.toDTO(user);
     }
 
+    public UserDTO findByEmail(String email) {
+        return null;
+    }
+
     public UserDTO save(NewUserDTO data) {
         Optional<Company> result = companyRepository.findById(data.getCompany());
 
@@ -68,7 +72,7 @@ public class UserServiceImpl implements UserService {
             user.setFirstSurname(data.getFirstSurname());
             user.setSecondSurname(data.getSecondSurname());
             user.setEmail(data.getEmail());
-            user.setPassword(data.getPassword());
+            user.setPassword(new BCryptPasswordEncoder().encode(data.getPassword()));
             user.setType(data.getType());
             user.setCompany(company);
             user.setCreatedAt(new Date());

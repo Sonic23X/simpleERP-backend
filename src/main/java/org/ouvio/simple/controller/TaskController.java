@@ -7,7 +7,9 @@ import org.ouvio.simple.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -23,35 +25,37 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDTO> findAll() {
+    public ResponseEntity<List<TaskDTO>> findAll() {
         log.info("Entrado a metodo: taks-findAll");
-        return service.findAll();
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public TaskDTO findById(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<TaskDTO> findById(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: taks-findById");
-        return service.findById(id);
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDTO save(@RequestBody NewTaskDTO data) {
+    public ResponseEntity<TaskDTO> save(@RequestBody NewTaskDTO data) {
         log.info("Entrado a metodo: taks-save");
-        return service.save(data);
+        return ResponseEntity.created(URI.create("")).body(service.save(data));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable("id") long id, @RequestBody TaskDTO data) throws Exception {
+    public ResponseEntity<Void> update(@PathVariable("id") long id, @RequestBody TaskDTO data) throws Exception {
         log.info("Entrado a metodo: taks-update");
         service.update(id, data);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: taks-delete");
         service.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

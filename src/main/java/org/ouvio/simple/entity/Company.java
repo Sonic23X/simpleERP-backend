@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Company {
     private long id;
 
     @Column(name = "name", nullable = false)
+    @NotEmpty(message = "El nombre es obligatorio")
     private String name;
 
     @Column(name = "created_at")

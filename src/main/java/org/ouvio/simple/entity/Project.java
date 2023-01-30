@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Project {
     private long id;
 
     @Column(name = "name", nullable = false)
+    @NotEmpty(message = "El nombre es obligatorio")
     private String name;
 
     @ManyToOne

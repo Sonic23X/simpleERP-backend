@@ -10,6 +10,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +35,13 @@ public class Task {
     private long id;
 
     @Column(name = "description", nullable = false)
+    @Size(max = 255, message = "Descripcion no válida")
+    @NotEmpty(message = "El campo descripción es obligatorio")
     private String description;
 
     @Column(name = "limit_date", nullable = false)
+    @Past(message = "La fecha no es válida")
+    //@NotEmpty(message = "El campo fecha es obligatorio")
     private Date limitDate;
 
     @OneToOne

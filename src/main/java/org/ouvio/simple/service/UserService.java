@@ -11,6 +11,8 @@ public interface UserService {
 
     UserDTO findById(long id);
 
+    UserDTO findByEmail(String email);
+
     UserDTO save(NewUserDTO data);
 
     void update(long id, UserDTO data) throws Exception;

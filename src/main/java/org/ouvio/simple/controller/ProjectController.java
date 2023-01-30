@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -23,35 +25,37 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<ProjectDTO> findAll() {
+    public ResponseEntity<List<ProjectDTO>> findAll() {
         log.info("Entrado a metodo: project-findAll");
-        return service.findAll();
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ProjectDTO findById(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<ProjectDTO> findById(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: project-findById");
-        return service.findById(id);
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectDTO save(@RequestBody NewProjectDTO data) {
+    public ResponseEntity<ProjectDTO> save(@RequestBody NewProjectDTO data) {
         log.info("Entrado a metodo: project-save");
-        return service.save(data);
+        return ResponseEntity.created(URI.create("")).body(service.save(data));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable("id") long id, @RequestBody ProjectDTO data) throws Exception {
+    public ResponseEntity<Void> update(@PathVariable("id") long id, @RequestBody ProjectDTO data) throws Exception {
         log.info("Entrado a metodo: project-update");
         service.update(id, data);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") long id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws Exception {
         log.info("Entrado a metodo: project-delete");
         service.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
